@@ -21,9 +21,21 @@ import java.util.Collections;
 public class AppConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(csrf -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorithy -> authorithy.requestMatchers("/api/**").authenticated().requestMatchers("*").permitAll()).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class).cors(cors -> cors.configurationSource(coresConfigurationSource()));
+        httpSecurity
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
+                .authorizeHttpRequests(authority ->
+                        authority
+                                .requestMatchers("/api/**").authenticated() // Secure all /api/** endpoints
+                                .requestMatchers("/auth/signup", "/auth/login").permitAll() // Allow /auth/signup and /auth/login to be accessed without authentication
+                                .anyRequest().permitAll() // Allow other requests without authentication
+                )
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class) // Add JWT token validator filter before BasicAuthenticationFilter
+                .cors(cors -> cors.configurationSource(coresConfigurationSource())); // Handle CORS
+
         return httpSecurity.build();
     }
+
 
     private CorsConfigurationSource coresConfigurationSource() {
         return new CorsConfigurationSource() {

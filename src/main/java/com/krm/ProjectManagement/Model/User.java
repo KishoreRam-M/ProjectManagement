@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "Users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,9 +20,13 @@ public class User {
     private String email;
     private String password;
 
+    private int projectSize;
+
     @OneToMany(mappedBy = "asignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Issue> assignedIssues = new ArrayList<>();
 
-    private int projectSize;
+    @OneToMany(mappedBy = "owner")
+    @JsonIgnore
+    private List<Project> ownedProjects = new ArrayList<>();
 }

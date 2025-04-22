@@ -21,6 +21,7 @@ public class Project {
 
     private String description;
     private String category;
+    private String name;
 
     @ElementCollection
     private List<String> tags = new ArrayList<>();
@@ -33,4 +34,6 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> issues = new ArrayList<>();
+    @ManyToMany
+    private List<User> team= new ArrayList<>();
 }

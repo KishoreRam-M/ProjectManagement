@@ -26,6 +26,8 @@ public class Issue {
     private String status;
     private String priority;
     private LocalDate dueDate;
+    private String title;
+    private String description;
     @ElementCollection
 
     private List<String> tags = new ArrayList<>();

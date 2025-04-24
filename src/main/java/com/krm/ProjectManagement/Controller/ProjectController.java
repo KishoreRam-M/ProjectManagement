@@ -1,9 +1,12 @@
 package com.krm.ProjectManagement.Controller;
 
 import com.krm.ProjectManagement.Model.Chat;
+import com.krm.ProjectManagement.Model.Invitation;
 import com.krm.ProjectManagement.Model.Project;
+import com.krm.ProjectManagement.Model.Response.MessageResponse;
 import com.krm.ProjectManagement.Model.User;
-import com.krm.ProjectManagement.Service.ProjectServiceImpl;
+import com.krm.ProjectManagement.Service.Impl.ProjectServiceImpl;
+import com.krm.ProjectManagement.Service.InvitationService;
 import com.krm.ProjectManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ public class ProjectController {
 
     @Autowired
     private ProjectServiceImpl projectService;
+    @Autowired
+    private InvitationService invitationService;
 
     @Autowired
     private UserService userService;
@@ -92,4 +97,20 @@ public class ProjectController {
         Chat chat = projectService.getChatByProjectId(projectId);
         return ResponseEntity.ok(chat);
     }
+
+    @PostMapping("/accept_invitation")
+    public ResponseEntity<Invitation> inviteProject(
+            @RequestBody Invitation invitation,
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        MessageResponse messageResponse = new MessageResponse("User Invitation send");
+        projectService.addUserIdProject(invitation.getProjectID(), user.getId());
+
+        Invitation invitation1 = invitationService.acceptInvitation(invitation.getEmail(), invitation.getProjectID());
+        return ResponseEntity.ok(invitation1);
+    }
+
+
 }

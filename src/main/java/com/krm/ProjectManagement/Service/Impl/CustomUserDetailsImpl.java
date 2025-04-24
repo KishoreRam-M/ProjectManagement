@@ -1,4 +1,4 @@
-package com.krm.ProjectManagement.Service;
+package com.krm.ProjectManagement.Service.Impl;
 
 import com.krm.ProjectManagement.Model.User;
 import com.krm.ProjectManagement.Repo.UserRepo;

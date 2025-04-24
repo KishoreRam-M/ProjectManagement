@@ -1,4 +1,4 @@
-package com.krm.ProjectManagement.Model;
+package com.krm.ProjectManagement.Model.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

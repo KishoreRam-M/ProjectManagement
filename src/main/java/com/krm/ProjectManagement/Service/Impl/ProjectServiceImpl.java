@@ -1,10 +1,11 @@
-package com.krm.ProjectManagement.Service;
+package com.krm.ProjectManagement.Service.Impl;
 
 import com.krm.ProjectManagement.Model.Chat;
 import com.krm.ProjectManagement.Model.Project;
 import com.krm.ProjectManagement.Model.User;
 import com.krm.ProjectManagement.Repo.ProjectRepo;
 import com.krm.ProjectManagement.Repo.UserRepo;
+import com.krm.ProjectManagement.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

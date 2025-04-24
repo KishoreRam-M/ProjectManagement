@@ -1,8 +1,9 @@
-package com.krm.ProjectManagement.Service;
+package com.krm.ProjectManagement.Service.Impl;
 
 import com.krm.ProjectManagement.Configuration.JwtProvider;
 import com.krm.ProjectManagement.Model.User;
 import com.krm.ProjectManagement.Repo.UserRepo;
+import com.krm.ProjectManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

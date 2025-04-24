@@ -1,11 +1,11 @@
 package com.krm.ProjectManagement.Controller;
 
 import com.krm.ProjectManagement.Configuration.JwtProvider;
-import com.krm.ProjectManagement.Model.AuthResponse;
-import com.krm.ProjectManagement.Model.LoginRequest;
+import com.krm.ProjectManagement.Model.Response.AuthResponse;
+import com.krm.ProjectManagement.Model.Request.LoginRequest;
 import com.krm.ProjectManagement.Model.User;
 import com.krm.ProjectManagement.Repo.UserRepo;
-import com.krm.ProjectManagement.Service.CustomUserDetailsImpl;
+import com.krm.ProjectManagement.Service.Impl.CustomUserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

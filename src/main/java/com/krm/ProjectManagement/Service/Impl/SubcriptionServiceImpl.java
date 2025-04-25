@@ -28,16 +28,39 @@ public class SubcriptionServiceImpl implements SubcriptionService {
 
     @Override
     public Subcription getUsersSubscription(Long userid, PlanType planType) throws Exception {
-        return null;
+
+        Subcription subcription = subcriptionRepo.findByUserId(userid);
+        if (isValid(subcription)) {
+            subcription.setPlanType(PlanType.FREE);
+            subcription.setGetSubcriptionEndDate(LocalDate.now().plusMonths(12));
+            subcription.setSubcriptionStartDate(LocalDate.now());
+        }
+        return subcriptionRepo.save(subcription);
+
     }
 
     @Override
-    public Subcription upgradeSubcription(Long userid, PlanType planType) {
-        return null;
+    public Subcription upgradeSubcription(Long userId, PlanType planType) {
+        Subcription subcription = subcriptionRepo.findByUserId(userId);
+        subcription.setPlanType(planType);
+        subcription.setSubcriptionStartDate(LocalDate.now());
+
+        if (planType.equals(PlanType.ANNUALLY)) {
+            subcription.setGetSubcriptionEndDate(LocalDate.now().plusMonths(12));
+        } else {
+            subcription.setGetSubcriptionEndDate(LocalDate.now().plusMonths(1));
+        }
+
+        return subcriptionRepo.save(subcription);
     }
 
     @Override
     public boolean isValid(Subcription subcription) {
-        return false;
+        if (subcription.getPlanType().equals(PlanType.FREE)) {
+            return true;
+        }
+        LocalDate endDate = subcription.getGetSubcriptionEndDate();
+        LocalDate currentDate = LocalDate.now();
+        return endDate.isAfter(currentDate) || endDate.isEqual(currentDate);
     }
 }

@@ -7,9 +7,10 @@ import com.krm.ProjectManagement.Repo.SubcriptionRepo;
 import com.krm.ProjectManagement.Service.SubcriptionService;
 import com.krm.ProjectManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-
+@Service
 public class SubcriptionServiceImpl implements SubcriptionService {
     @Autowired
     private UserService userService;

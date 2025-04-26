@@ -1,5 +1,6 @@
 package com.krm.ProjectManagement.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -24,9 +25,11 @@ public class Issue {
     @JsonIgnore
     @ManyToOne
     private User assignee;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
+
 
     private String status;
     private String priority;

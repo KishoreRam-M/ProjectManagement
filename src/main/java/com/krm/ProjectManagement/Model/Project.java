@@ -1,6 +1,7 @@
 package com.krm.ProjectManagement.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,9 +33,10 @@ public class Project {
     private  Chat chat ;
     @ManyToOne
     private User owner;
-
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Issue> issues = new ArrayList<>();
+
     @ManyToMany
     private List<User> team = new ArrayList<>();
 }

@@ -44,6 +44,7 @@ public class ProjectController {
     ) throws Exception {
         userService.findUserProfileByJwt(jwt);
         Project project = projectService.getProductById(projectId);
+
         return ResponseEntity.ok(project);
     }
 
@@ -54,6 +55,7 @@ public class ProjectController {
     ) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
         Project createdProject = projectService.createProject(project, user);
+
         return ResponseEntity.ok(createdProject);
     }
 

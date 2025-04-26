@@ -1,5 +1,6 @@
 package com.krm.ProjectManagement.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,25 +16,31 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Issue {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @JsonIgnore
     @ManyToOne
-    private User asignee;
+    private User assignee;
+
     @ManyToOne
     private Project project;
+
     private String status;
     private String priority;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
+
     private String title;
     private String description;
-    @ElementCollection
 
+    @ElementCollection
     private List<String> tags = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
-
 }

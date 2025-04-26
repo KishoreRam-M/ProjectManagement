@@ -5,6 +5,7 @@ import com.krm.ProjectManagement.Model.Project;
 import com.krm.ProjectManagement.Model.Request.IssueRequest;
 import com.krm.ProjectManagement.Model.User;
 import com.krm.ProjectManagement.Repo.IssueRepo;
+import com.krm.ProjectManagement.Repo.ProjectRepo;
 import com.krm.ProjectManagement.Service.IssuesService;
 import com.krm.ProjectManagement.Service.ProjectService;
 import com.krm.ProjectManagement.Service.UserService;
@@ -16,79 +17,71 @@ import java.util.Optional;
 
 @Service
 public class IssueServiceImpl implements IssuesService {
+
     @Autowired
-    IssueRepo issueRepo;
+    private IssueRepo issueRepo;
+
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
+
     @Autowired
-    UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private ProjectRepo projectRepo;
 
     @Override
-    public Issue getTokenById(Long issueId) throws Exception {
-        Optional<Issue> issue = issueRepo.findById(issueId);
-
-        if (issue.isPresent()) {
-            return issue.get();
-
-        }
-        throw new Exception("NO issuse found");
-
+    public Issue getIssueById(Long issueId) throws Exception {
+        return issueRepo.findById(issueId)
+                .orElseThrow(() -> new Exception("Issue not found with ID: " + issueId));
     }
 
     @Override
-    public List<Issue> getIssueByProjectId(Long projectId) throws Exception {
+    public List<Issue> getIssuesByProjectId(Long projectId) throws Exception {
         return issueRepo.findByProjectId(projectId);
     }
 
     @Override
-    public Issue createIssue(IssueRequest issue, Long userId) throws Exception {
-        Project project = projectService.getProductById(issue.getProjectId());
-        Issue issue1 = new Issue();
-        issue.setTitle(issue.getTitle());
-        issue1.setDescription(issue.getDescription());
-        issue1.setStatus(issue.getStatus());
-        issue1.setProject(project);
-        issue1.setPriority(issue.getPriority());
-        issue1.setDueDate(issue.getDueDate());
+    public Issue createIssue(IssueRequest issueRequest, Long userId) throws Exception {
+        Long id = issueRequest.getProjectId();
 
-        return issueRepo.save(issue1);
+        Project project = projectRepo.findById(id)
+                .orElseThrow(() -> new Exception("Project not found with ID: " + id));
+
+        Issue newIssue = new Issue();
+        newIssue.setTitle(issueRequest.getTitle());
+        newIssue.setDescription(issueRequest.getDescription());
+        newIssue.setStatus(issueRequest.getStatus());
+        newIssue.setPriority(issueRequest.getPriority());
+        newIssue.setDueDate(issueRequest.getDueDate());
+
+        newIssue.setProject(project);
+
+        return issueRepo.save(newIssue);
     }
 
     @Override
-    public void deleteIssue(Long issueId, Long userid) throws Exception {
-        getIssueByProjectId(issueId);
-        issueRepo.deleteById(issueId);
+    public void deleteIssue(Long issueId, Long userId) throws Exception {
+        Issue issue = getIssueById(issueId);
+        issueRepo.delete(issue);
     }
 
     @Override
-    public Issue addIssueToUser(Long issueid, Long userid) throws Exception {
-        User user = userService.findUserById(userid);
-        Issue issue = getIssueById(issueid);
-        issue.setAsignee(user);
+    public Issue assignUserToIssue(Long issueId, Long userId) throws Exception {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new Exception("User not found with ID: " + userId);
+        }
 
+        Issue issue = getIssueById(issueId);
+        issue.setAssignee(user);
         return issueRepo.save(issue);
     }
 
-    public  Issue getIssueById(Long issueid) {
-        Optional<Issue> optionalIssue = issueRepo.findById(issueid);
-        try {
-            if (optionalIssue.isEmpty()) {
-                throw new Exception("issue doesnot exist");
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Issue issue = optionalIssue.get();
-        return issue;
-
-    }
-
     @Override
-    public Issue updateStatus(Long issueid, String status) throws Exception {
-        Issue issue = getIssueById(issueid);
+    public Issue updateStatus(Long issueId, String status) throws Exception {
+        Issue issue = getIssueById(issueId);
         issue.setStatus(status);
         return issueRepo.save(issue);
-
     }
 }

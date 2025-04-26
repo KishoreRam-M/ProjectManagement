@@ -24,7 +24,7 @@ public class User {
 
     private int projectSize;
 
-    @OneToMany(mappedBy = "asignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Issue> assignedIssues = new ArrayList<>();
 

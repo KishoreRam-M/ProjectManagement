@@ -25,21 +25,21 @@ public class ProjectServiceImpl implements ProjectService {
     private UserRepo userRepo;
 
     @Override
-    public Project createProject(Project project, User usere) throws Exception {
+    public Project createProject(Project project, User user) throws Exception {
         Project createdProject = new Project();
         createdProject.setCategory(project.getCategory());
-        createdProject.setOwner(usere);
+        createdProject.setOwner(user);
         createdProject.setDescription(project.getDescription());
         createdProject.setTags(project.getTags());
         createdProject.setName(project.getName());
-        createdProject.getTeam().add(usere);
+        createdProject.getTeam().add(user);
 
         Project savedProject = projectRepo.save(createdProject);
         Chat chat = new Chat();
 
         chat.setProject(savedProject);
         Chat projectChat = serviceImp.createChat(chat);
-        savedProject.setChat(chat);
+        savedProject.setChat(projectChat);
 
         return savedProject;
     }
@@ -52,77 +52,77 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if (tags != null) {
-            projects = projects.stream().filter(project -> project.getTags().equals(tags)).collect(Collectors.toList());
+            projects = projects.stream()
+                    .filter(project -> project.getTags().contains(tags))
+                    .collect(Collectors.toList());
         }
         return projects;
-
     }
 
     @Override
-    public Project getProductById(Long ProjectId) throws Exception {
-        Optional<Project> projectOptional = projectRepo.findById(ProjectId);
+    public Project getProductById(Long projectId) throws Exception {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
         if (projectOptional.isEmpty()) {
-            throw new Exception("User does not exist");
+            throw new Exception("Project does not exist");
         }
 
-        Project project = projectOptional.get();
-        return project;
+        return projectOptional.get();
     }
 
     @Override
-    public void deleteProject(Long ProjectId, Long userid) throws Exception {
-        projectRepo.deleteById(ProjectId);
-
-
+    public void deleteProject(Long projectId, Long userId) throws Exception {
+        projectRepo.deleteById(projectId);
     }
 
     @Override
     public Project updateProject(Project project, Long id) throws Exception {
-        Project upadtedProject = new Project();
-        upadtedProject.setName(upadtedProject.getName());
-        upadtedProject.setDescription(upadtedProject.getDescription());
-        upadtedProject.setTags(upadtedProject.getTags());
-        return projectRepo.save(upadtedProject);
+        Project updatedProject = getProductById(id);
+
+        updatedProject.setName(project.getName());
+        updatedProject.setDescription(project.getDescription());
+        updatedProject.setTags(project.getTags());
+
+        return projectRepo.save(updatedProject);
     }
 
     @Override
-    public void addUserIdProject(Long projectId, Long userid) throws Exception {
+    public void addUserIdProject(Long projectId, Long userId) throws Exception {
         Project project = getProductById(projectId);
-        User user = userService.findUserById(userid);
-        if(!project.getTeam().contains(user))
-        {
+        User user = userService.findUserById(userId);
+        if (!project.getTeam().contains(user)) {
             project.getChat().getUserList().add(user);
             project.getTeam().add(user);
             projectRepo.save(project);
         }
-
-
     }
 
     @Override
-    public void removeUserIdProject(Long projectId, Long userId) throws Exception {
+    public void removeUserFromProject(Long projectId, Long userId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        Project project = getProductById(projectId);
-        User user = userService.findUserById(userId);
-        if(!project.getTeam().contains(user))
-        {
-            project.getChat().getUserList().remove(user);
+        if (project.getTeam().contains(user)) {
+            if (project.getChat() != null) {
+                project.getChat().getUserList().remove(user);
+            }
             project.getTeam().remove(user);
             projectRepo.save(project);
+        } else {
+            throw new RuntimeException("User not part of project team");
         }
-
     }
+
 
     @Override
     public Chat getChatByProjectId(Long projectId) throws Exception {
-        Project project =getProductById(projectId);
-
+        Project project = getProductById(projectId);
         return project.getChat();
     }
 
     @Override
-    public List<Project> searchProjects(String keywword, User user) throws Exception {
-        return projectRepo.findByNameContainingAndTeamContains(keywword, user);
-
+    public List<Project> searchProjects(String keyword, User user) throws Exception {
+        return projectRepo.findByNameContainingAndTeamContains(keyword, user);
     }
 }

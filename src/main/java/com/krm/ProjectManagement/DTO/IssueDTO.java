@@ -21,7 +21,7 @@ public class IssueDTO {
     private String priority;
     private LocalDate dueDate;
     private List<String> tags = new ArrayList<>();
-    private Project project;
     private String description;
-    private User assigne;
+    private User assignee;
+    private Project project;
 }

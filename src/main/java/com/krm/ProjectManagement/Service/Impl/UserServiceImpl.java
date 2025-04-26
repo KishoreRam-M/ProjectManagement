@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserProfileByJwt(String jwt) throws Exception {
+
         String email = JwtProvider.getEmailFromToken(jwt);
         return findUserByEmail(email);
     }
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
                     "user not found"
             );
         }
-        return null;
+        return  optionalUser.get();
     }
 
     @Override

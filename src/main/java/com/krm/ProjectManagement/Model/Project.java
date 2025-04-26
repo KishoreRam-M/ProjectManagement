@@ -27,15 +27,14 @@ public class Project {
 
     @ElementCollection
     private List<String> tags = new ArrayList<>();
-
-    @ManyToOne
-    private Chat chat;
-
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private  Chat chat ;
     @ManyToOne
     private User owner;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> issues = new ArrayList<>();
     @ManyToMany
-    private List<User> team= new ArrayList<>();
+    private List<User> team = new ArrayList<>();
 }

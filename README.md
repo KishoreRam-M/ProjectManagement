@@ -1,43 +1,14 @@
-🎨 1. Base Layer (Foundational Backgrounds)
-Purpose	Color	Name	Use case
-Main Background	#0F0F1C	Deep Navy Black	Entire site body, full sections
-Elevated Section	#181829	Charcoal Blue	Cards, modals, navbars
-Surface Layer	#24273A	Slate Gray	Hover states, shadows, dividers
-
-These colors provide depth and separation while maintaining a unified tone.
-
-💡 2. Accent Colors (Visual Highlights)
-Purpose	Color	Name	Use case
-Primary Accent	#4E9EFF	Soft Royal Blue	Buttons, links, highlights
-Secondary Accent	#5CE1E6	Minty Cyan	Badges, tags, outlines
-Hover Accent	#73B4FF	Hover Blue	Button/Link hover
-Danger / Alert	#FF6B6B	Coral Red	Warnings, errors
-Success	#4ADE80	Emerald Green	Success alerts, completed states
-
-These colors stand out against your dark background without being harsh.
-
-📝 3. Typography (Text Colors)
-Purpose	Color	Name	Use case
-Primary Text	#EDEDED	Soft White	Body text, titles
-Secondary Text	#A9ADC1	Cool Gray	Captions, placeholder text
-Muted/Disabled	#6B6E87	Steel Gray	Disabled elements
-
-🧱 4. UI Elements & Borders
-Purpose	Color	Name	Use case
-Card Border	#2C2F48	Dusty Indigo	Card separators
-Input Border	#3B3F5C	Graphite Blue	Form fields
-Focus Ring	#5CE1E6	Cyan Focus	Input highlight/focus border
-
-🌘 5. Optional Gradients
-Hero background: linear-gradient(135deg, #0F0F1C, #181829)
-
-CTA button: linear-gradient(90deg, #4E9EFF, #5CE1E6)
-
-🧑‍🎨 Design Tips
-Use elevation through slight shadow and layered backgrounds to separate components.
-
-Avoid flat design — subtle gradients or borders improve visual hierarchy.
-
-Use color sparingly for maximum effect (e.g., limit cyan to key actions only).
-
-Pair with modern fonts like Inter, Satoshi, or Poppins.
+| **What It’s For**          | **Use in Tailwind**         | **Color Code**                             | **Why Use It? (Plain English)**                            |
+| -------------------------- | --------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| 🪵 Page Background         | `bg-base`                   | `#0F0F1C`                                  | Deep blackish background — elegant & easy on the eyes.     |
+| 🧱 Cards / Navbar          | `bg-elevated`               | `#181829`                                  | Slightly lighter than base — for sections, cards, headers. |
+| 📝 Main Text               | `text-primary`              | `#FFFFFF`                                  | Bright white — used for all important text.                |
+| 💬 Description Text        | `text-secondary`            | `#A9ADC1`                                  | Light grey — for smaller or less important text.           |
+| 🔵 Buttons / Highlights    | `text-accent` / `bg-accent` | `#4E9EFF`                                  | Vibrant blue — for buttons, links, key areas.              |
+| 🌈 Gradient Button         | `bg-[accent-gradient]`      | `linear-gradient(90deg, #4E9EFF, #5CE1E6)` | A shiny premium-style gradient — perfect for CTA buttons.  |
+| 🔲 Border Color            | `border-default`            | `#292945`                                  | Soft border — use it for input outlines or dividers.       |
+| 🔘 Input Background        | `bg-input`                  | `#1E1E30`                                  | Slightly lighter than base — clean input fields.           |
+| ✅ Success Text             | `text-success`              | `#5CE1A3`                                  | Bright green — for "Success" or "Completed" states.        |
+| ❌ Error Text               | `text-error`                | `#FF6B6B`                                  | Red — for errors, failed actions.                          |
+| 🎫 Tags / Chips / Tooltips | `bg-muted`                  | `#20202E`                                  | Dark gray — for small UI elements like labels.             |
+| 💡 Hover Highlight         | `highlight`                 | `rgba(255,255,255,0.05)`                   | Transparent white — for soft hover effects on cards.       |

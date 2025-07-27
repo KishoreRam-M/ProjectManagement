@@ -1,6 +1,5 @@
 import React from 'react'
-import HeroSection from '../Com/HeroSection'
-
+import HeroSection from '../Com/HomeComponent/HeroSection'
 const HomePage = () => {
   return (
 <>

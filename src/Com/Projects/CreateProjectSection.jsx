@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import api from '../Api/axiosInstace';
-
+import api from '../../Api/axiosInstace';
 const CreateProjectSection = () => {
   const nameref = useRef(null);
   const descref = useRef(null);

@@ -32,6 +32,61 @@ const testimonials = [
     quote: 'From chaos to clarity. We finally feel in flow.',
     highlight: 'ZenFlow just works.',
   },
+  {
+    name: 'ZingZon 🚫',
+    quote: 'Too many meetings about meetings.',
+    highlight: 'ZenFlow canceled the chaos.',
+  },
+  {
+    name: 'TwisterBird 🪹',
+    quote: 'We couldn’t find our threads.',
+    highlight: 'ZenFlow made it simple.',
+  },
+  {
+    name: 'MetaMorph 😵‍💫',
+    quote: 'The metaverse meetings were… weird.',
+    highlight: 'Back to reality with ZenFlow.',
+  },
+  {
+    name: 'ClippyAI 📎',
+    quote: 'I tried helping… but they replaced me.',
+    highlight: 'ZenFlow needs no babysitter.',
+  },
+  {
+    name: 'NetFlux ❌',
+    quote: 'Too much streaming, not enough working.',
+    highlight: 'ZenFlow fixed our focus.',
+  },
+  {
+    name: 'ByteDanceOff 💃',
+    quote: 'We danced around deadlines.',
+    highlight: 'ZenFlow helped us land the beat.',
+  },
+  {
+    name: 'Snapslack 🤐',
+    quote: 'Too many messages, not enough meaning.',
+    highlight: 'ZenFlow brought back signal.',
+  },
+  {
+    name: 'RedBubbleNet 🌐',
+    quote: 'Creative clutter everywhere.',
+    highlight: 'ZenFlow gave us structure.',
+  },
+  {
+    name: 'Oopsora ☁️',
+    quote: 'Lost in our own cloud.',
+    highlight: 'ZenFlow grounded us.',
+  },
+  {
+    name: 'BoomBox AI 🔊',
+    quote: 'All pitch, no harmony.',
+    highlight: 'ZenFlow helped us sync.',
+  },
+  {
+    name: 'StuckHub 🧱',
+    quote: 'Code frozen. PRs piling up.',
+    highlight: 'ZenFlow got us unstuck.',
+  },
 ];
 
 const TrustedSection = () => {
@@ -41,7 +96,8 @@ const TrustedSection = () => {
         Trusted by 10,000+ productive teams and makers
       </h2>
       <p className="text-[#A9ADC1] mb-10 max-w-2xl mx-auto">
-        From solo devs to remote-first companies — <span className="italic text-[#4E9EFF]">ZenFlow powers real work</span>, not bureaucracy.
+        From solo devs to remote-first companies —{' '}
+        <span className="italic text-[#4E9EFF]">ZenFlow powers real work</span>, not bureaucracy.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">

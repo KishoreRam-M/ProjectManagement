@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Sparkles, CheckCircle, Zap, Clock, Eye, Bot } from 'lucide-react';
-
+import TrustedSection from './TrustedSection';
+import AboutSection from './AboutSection';
+import ContactSection from './ContactSection';
 const features = [
   {
     icon: <Zap className="w-6 h-6 text-[#5CE1E6]" />,
@@ -40,17 +43,35 @@ const features = [
   },
 ];
 
-const FeatureCard = ({ icon, emoji, title, description }) => (
-  <div className="p-6 bg-[#181829] border border-[#292945] rounded-2xl shadow-md hover:shadow-lg hover:border-[#5CE1E6] transition-all duration-300 space-y-4">
+const FeatureCard = ({ icon, emoji, title, description, animate }) => (
+  <div
+    className={`p-6 bg-[#181829] border border-[#292945] rounded-2xl shadow-md transition-all duration-500 transform
+      ${animate ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+      hover:scale-105 hover:shadow-lg hover:border-[#5CE1E6]
+    `}
+  >
     <div className="flex items-center space-x-3">
       <div className="text-2xl">{emoji}</div>
       <h4 className="text-xl font-semibold text-white">{title}</h4>
     </div>
-    <p className="text-[#A9ADC1] text-sm">{description}</p>
+    <p className="text-[#A9ADC1] text-sm mt-2">{description}</p>
   </div>
 );
 
 const FeatureSection = () => {
+  const location = useLocation();
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.fromHero) {
+      setTimeout(() => {
+        setAnimate(true);
+      }, 100);
+    } else {
+      setAnimate(true);
+    }
+  }, [location]);
+
   return (
     <section className="bg-[#0F0F1C] py-20 px-4">
       <div className="max-w-6xl mx-auto text-center">
@@ -63,9 +84,17 @@ const FeatureSection = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <FeatureCard key={index} {...feature} />
+            <FeatureCard key={index} {...feature} animate={animate} />
           ))}
         </div>
+      </div>
+
+      {/* Trusted by Section */}
+      <div className="mt-20">
+        <AboutSection/>
+
+        <TrustedSection />
+        <ContactSection/>
       </div>
     </section>
   );

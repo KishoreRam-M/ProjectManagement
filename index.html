@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zenflow</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              base: '#0F0F1C',
+              elevated: '#181829',
+              primary: '#FFFFFF',
+              secondary: '#A9ADC1',
+              accent: '#4E9EFF',
+              accent2: '#5CE1E6',
+              border: '#292945',
+              input: '#1E1E30',
+              success: '#5CE1A3',
+              error: '#FF6B6B',
+              muted: '#20202E',
+              highlight: 'rgba(255,255,255,0.05)',
+            },
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+              dmsans: ['DM Sans', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-base text-primary font-inter">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,4 +1,23 @@
-.container {
-  position: relative;
-  top: 100px;
-  padding:10px;
+.input {
+  background-color: #1E1E30;
+  color: #FFFFFF;
+  border: 1px solid #292945;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #4E9EFF, #5CE1E6);
+  color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background-color: #4E9EFF;
+  color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}

@@ -8,8 +8,9 @@ import FeatureSection from './Com/HomeComponent/FeatureSection';
 import Signup from './Pages/Signup';
 import Project from './Pages/Project';
 import CreateProject from './Com/Projects/CreateProjectSection';
-import ViewProject from './Com/Projects/VeiwProject' ;
 import Edit from './Com/Projects/EditProject'
+import Issue from './Com/Issue/Issue';
+import ViewProject from './Com/Projects/VeiwProject'
 const App = () => {
   return (
 <>
@@ -24,6 +25,8 @@ const App = () => {
     <Route path='/projects' element={<Project/>}/>
      <Route path="/projects/:projectId" element={<ViewProject />} />
      <Route path="/projects/:projectId/edit" element={<Edit />} />
+     <Route path='/project/issue' element={<Issue/>}/>
+
 
 
 

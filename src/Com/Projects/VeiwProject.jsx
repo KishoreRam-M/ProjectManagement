@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom';
 import CodeEditor from '../../CodeEditor';
 import api from '../../Api/axiosInstace';
 
+
 function ViewProject() {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
+  const [ code , setCode ]= useState(null);
 
   const getProject = async () => {
     try {
@@ -23,6 +25,7 @@ function ViewProject() {
     try {
       const response = await api.get('/files/list');
       setFiles(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error('Error fetching files:', error);
     }
@@ -62,6 +65,21 @@ function ViewProject() {
     getProject();
     getFiles();
   }, [projectId]);
+
+
+  const readFile = async (filename)=> {
+    const resposne =  await api.get('files/read',
+      {
+        params:{filename:filename}
+      }
+    );
+    console.log(resposne.data)
+    setCode(resposne.data);
+    
+
+  }
+
+
 
   return (
     <div className="min-h-screen bg-base p-4 sm:p-6 font-sans">
@@ -109,7 +127,7 @@ function ViewProject() {
                     key={file}
                     className="flex items-center justify-between py-2 border-b border-default last:border-none"
                   >
-                    <span className="text-lg text-primary truncate max-w-[70%]">{file}</span>
+                    <span className="text-lg text-primary truncate max-w-[70%]"> <button onClick={(e)=>readFile(file)}>  {file} </button></span>
                     <button
                       className="w-7 h-7 bg-muted rounded cursor-pointer flex items-center justify-center hover:bg-red-600 transition"
                       onClick={() => deleteFile(file)}
@@ -148,7 +166,7 @@ function ViewProject() {
 
         {/* Right Column - Code Editor */}
         <div className="lg:col-span-8 flex flex-col">
-          <CodeEditor />
+          <CodeEditor c={code}/>
         </div>
 
         {/* Upload button on large screens */}

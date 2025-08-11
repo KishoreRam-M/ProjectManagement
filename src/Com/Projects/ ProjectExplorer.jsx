@@ -41,28 +41,31 @@ const ProjectExplorer = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base text-primary px-4 py-6">
-      {/* 🔍 Search Section */}
-      <div className="max-w-md mx-auto mb-6">
+    <div className="min-h-screen bg-gray-900 p-8 font-sans text-gray-100">
+      {/* Search Section */}
+      <div className="max-w-md mx-auto mb-10">
         <input
           type="text"
           placeholder="Search projects..."
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          className="w-full px-4 py-2 bg-input text-primary border border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+          className="w-full px-5 py-3 rounded-3xl bg-gray-800 border border-indigo-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm transition"
+          onKeyDown={(e) => e.key === 'Enter' && searchProjects()}
+          aria-label="Search projects"
         />
         <button
           onClick={searchProjects}
-          className="mt-4 w-full bg-accent text-white py-2 rounded-lg hover:opacity-90 transition-all"
+          className="mt-4 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl py-3 font-semibold text-white shadow-lg hover:opacity-90 transition"
+          aria-label="Search projects button"
         >
           🔍 Search
         </button>
       </div>
 
-      {/* 📂 Project Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {/* Project Grid */}
+      <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
         {projects.length === 0 ? (
-          <p className="text-secondary">No projects found.</p>
+          <p className="text-gray-400 text-center text-lg">No projects found.</p>
         ) : (
           projects.map((project) => (
             <ProjectCard key={project.id} {...project} onDelete={handleDelete} />
@@ -73,44 +76,68 @@ const ProjectExplorer = () => {
   );
 };
 
-// 📦 ProjectCard Component
+// ProjectCard Component
 const ProjectCard = ({ id, name, description, category, tags = [], onDelete }) => {
-  const navigate = useNavigate(); // ✅ Add this line
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-elevated border border-default rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-muted">
-      <div className="text-secondary text-xs mb-1">ID: {id}</div>
+    <div
+      className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-3xl p-6 shadow-lg border border-indigo-700 hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 cursor-default flex flex-col justify-between"
+      role="article"
+      aria-labelledby={`project-title-${id}`}
+    >
+      <div>
+        <div className="text-indigo-400 text-xs mb-1 font-mono">ID: {id}</div>
+        <h2
+          id={`project-title-${id}`}
+          className="text-white text-2xl font-extrabold mb-3 truncate"
+          title={name}
+        >
+          {name}
+        </h2>
+        <p className="text-indigo-200 text-sm mb-4 line-clamp-3" title={description}>
+          {description || 'No description available.'}
+        </p>
 
-      <h2 className="text-primary text-xl font-bold mb-2">{name}</h2>
-      <p className="text-secondary text-sm mb-3">{description}</p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className="bg-muted text-secondary text-xs px-3 py-1 rounded-full border border-default"
-          >
-            #{tag}
-          </span>
-        ))}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {tags.length === 0 ? (
+            <span className="text-indigo-400 italic text-xs">No tags</span>
+          ) : (
+            tags.map((tag, idx) => (
+              <span
+                key={idx}
+                className="bg-gradient-to-r from-pink-600 to-purple-700 text-white text-xs px-4 py-1 rounded-full font-semibold select-none"
+                aria-label={`Tag: ${tag}`}
+              >
+                #{tag}
+              </span>
+            ))
+          )}
+        </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <span className="text-accent text-sm italic">{category}</span>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <span className="text-pink-400 italic font-medium">{category || 'Uncategorized'}</span>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           <button
-            onClick={() => navigate(`/projects/${id}`)} // ✅ Navigate to view with ID
-            className="flex items-center gap-1 bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow hover:opacity-90 transition"
+            onClick={() => navigate(`/projects/${id}`)}
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold px-5 py-2 rounded-2xl shadow-md hover:opacity-90 transition"
+            aria-label={`View project ${name}`}
+            type="button"
           >
-            <Eye size={14} /> View
+            <Eye size={16} /> View
           </button>
 
           <button
-            onClick={() => onDelete(id)}
-            className="flex items-center gap-1 bg-gradient-to-r from-red-500 to-pink-400 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow hover:opacity-90 transition"
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to delete "${name}"?`)) onDelete(id);
+            }}
+            className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-pink-500 text-white text-sm font-semibold px-5 py-2 rounded-2xl shadow-md hover:opacity-90 transition"
+            aria-label={`Delete project ${name}`}
+            type="button"
           >
-            <Trash2 size={14} /> Delete
+            <Trash2 size={16} /> Delete
           </button>
         </div>
       </div>

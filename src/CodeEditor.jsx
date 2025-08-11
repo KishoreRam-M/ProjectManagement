@@ -33,7 +33,6 @@ const CodeEditor = ({ c }) => {
   useEffect(() => {
     if (c) {
       setCode(c);
-      console.log("Initial code prop:", c);
     }
   }, [c]);
 
@@ -44,11 +43,8 @@ const CodeEditor = ({ c }) => {
   const fetchFileList = async () => {
     try {
       const response = await api.get("/files/list");
-      if (Array.isArray(response.data)) {
-        setFileList(response.data);
-      } else {
-        setFileList([]);
-      }
+      if (Array.isArray(response.data)) setFileList(response.data);
+      else setFileList([]);
     } catch (error) {
       console.error("Error fetching file list:", error);
     }
@@ -60,15 +56,10 @@ const CodeEditor = ({ c }) => {
 
       if (!arr.includes(filename1)) {
         const payload = { filename: filename1, content: filecontent };
-        const response = await api.post("/files/create", payload);
-        console.log("File created:", response.data);
+        await api.post("/files/create", payload);
         fetchFileList();
       } else {
-        const response = await api.put("/files/update", {
-          filename: filename1,
-          content: filecontent,
-        });
-        console.log("File updated:", response.data);
+        await api.put("/files/update", { filename: filename1, content: filecontent });
       }
       setMessage("File saved successfully.");
       setTimeout(() => setMessage(""), 3000);
@@ -110,26 +101,20 @@ const CodeEditor = ({ c }) => {
       setMessage("Please enter code before running.");
       return;
     }
-
     setRunning(true);
     setOutput("Running...");
     setMessage("");
 
     try {
-      const payload = {
-        code,
-        language,
-        versionIndex: "4",
-      };
-
+      const payload = { code, language, versionIndex: "4" };
       const { data } = await api.post("/jdoodle/compile", payload);
 
       if (data.error) {
         setOutput(`Error: ${data.error}`);
+        setMessage(data.error);
       } else if (data.output) {
         setOutput(data.output);
       } else {
-        // fallback for unexpected response
         setOutput(JSON.stringify(data, null, 2));
       }
     } catch (error) {
@@ -142,23 +127,26 @@ const CodeEditor = ({ c }) => {
   };
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
-      <header className="bg-gray-800 p-3 border-b border-gray-700 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-xl font-bold select-none">⚡ Code Editor</h1>
+    <div className="min-h-screen bg-[#0F0F1C] flex flex-col p-6 font-sans text-gray-100">
+      {/* Header */}
+      <header className="flex flex-wrap items-center justify-between gap-3 bg-[#181829] rounded-3xl border border-[#292945] p-4 shadow-md">
+        <h1 className="text-2xl font-extrabold select-none bg-gradient-to-r from-[#4E9EFF] to-[#5CE1E6] bg-clip-text text-transparent">
+          ⚡ Code Editor
+        </h1>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <input
             type="text"
             value={filename}
             onChange={(e) => setFilename(e.target.value)}
             placeholder="Filename"
-            className="px-2 py-1 rounded text-black max-w-[140px]"
+            className="max-w-[140px] px-3 py-1.5 rounded-xl bg-[#111827] border border-[#334155] text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
 
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="px-2 py-1 rounded text-black"
+            className="px-3 py-1.5 rounded-xl bg-[#111827] border border-[#334155] text-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           >
             {Object.keys(languageMap).map((lang) => (
               <option key={lang} value={lang}>
@@ -170,43 +158,45 @@ const CodeEditor = ({ c }) => {
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
-            className="px-2 py-1 rounded text-black"
+            className="px-3 py-1.5 rounded-xl bg-[#111827] border border-[#334155] text-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           >
             <option value="vs-dark">Dark</option>
             <option value="light">Light</option>
           </select>
 
-          <button
-            title="Save"
-            onClick={() => saveLocally(filename, code)}
-            className="btn-icon"
-          >
-            <FiSave size={20} />
-          </button>
-          <button title="Copy" onClick={copyCode} className="btn-icon">
-            <FiClipboard size={20} />
-          </button>
-          <button title="Download" onClick={downloadCode} className="btn-icon">
-            <FiDownload size={20} />
-          </button>
-          <button title="Reset" onClick={resetEditor} className="btn-icon">
-            <FiRefreshCw size={20} />
-          </button>
-          <button title="Format" onClick={prettifyCode} className="btn-icon">
-            <FiCode size={20} />
-          </button>
+          {/* Buttons */}
+          {[
+            { onClick: () => saveLocally(filename, code), title: "Save", icon: <FiSave size={20} /> },
+            { onClick: copyCode, title: "Copy", icon: <FiClipboard size={20} /> },
+            { onClick: downloadCode, title: "Download", icon: <FiDownload size={20} /> },
+            { onClick: resetEditor, title: "Reset", icon: <FiRefreshCw size={20} /> },
+            { onClick: prettifyCode, title: "Format", icon: <FiCode size={20} /> },
+          ].map(({ onClick, title, icon }) => (
+            <button
+              key={title}
+              onClick={onClick}
+              title={title}
+              className="btn-icon bg-gradient-to-r from-[#4E9EFF] to-[#5CE1E6] text-[#0F0F1C]"
+            >
+              {icon}
+            </button>
+          ))}
+
           <button
             title="Run"
             onClick={runCode}
             disabled={running}
-            className="btn-icon disabled:opacity-50"
+            className={`btn-icon bg-gradient-to-r from-[#4E9EFF] to-[#5CE1E6] text-[#0F0F1C] ${
+              running ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
+            }`}
           >
             <FiPlay size={20} />
           </button>
         </div>
       </header>
 
-      <main className="flex-grow">
+      {/* Editor */}
+      <main className="flex-grow mt-6 rounded-2xl overflow-hidden shadow-lg border border-[#292945]">
         <Editor
           height="70vh"
           language={language}
@@ -224,38 +214,43 @@ const CodeEditor = ({ c }) => {
             fontSize: 14,
             minimap: { enabled: true },
             automaticLayout: true,
+            smoothScrolling: true,
+            scrollBeyondLastLine: false,
           }}
         />
       </main>
 
-      <section className="bg-black text-green-400 p-4 font-mono min-h-[15vh] border-t border-gray-700 overflow-auto">
-        <h2 className="text-white font-bold mb-1 select-none">Output:</h2>
+      {/* Output Section */}
+      <section className="mt-6 rounded-2xl border border-[#292945] bg-[#181829] p-4 font-mono min-h-[15vh] text-green-400 shadow-md overflow-auto">
+        <h2 className="font-bold mb-1 select-none text-gray-200">Output:</h2>
         <pre className="whitespace-pre-wrap">{output}</pre>
       </section>
 
+      {/* Message */}
       {message && (
-        <div className="text-center py-2 text-yellow-300 font-medium select-none">
-          {message}
-        </div>
+        <div className="mt-3 text-center text-yellow-400 font-medium select-none">{message}</div>
       )}
 
       <style>{`
         .btn-icon {
-          background: #2563eb;
-          padding: 6px 8px;
-          border-radius: 4px;
+          padding: 8px 10px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: background-color 0.3s ease;
-          cursor: pointer;
-          color: white;
         }
         .btn-icon:hover:not(:disabled) {
-          background: #1d4ed8;
+          filter: brightness(1.1);
         }
         .btn-icon:disabled {
           cursor: not-allowed;
+        }
+        input, select {
+          border: none;
+        }
+        input:focus, select:focus {
+          outline-offset: 2px;
         }
       `}</style>
     </div>
